@@ -1,0 +1,7 @@
+framework:
+    http_client:
+        default_options:
+            verify_host: false
+            verify_peer: false
+            retry_failed:
+                enabled: false
