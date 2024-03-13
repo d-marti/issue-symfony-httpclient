@@ -65,8 +65,8 @@ class TestController extends AbstractController
         try {
             $response = $client->request(
                 'GET',
-                'http://localhost:8000/sleep.php', // sleep for 5s
-                ['timeout' => 3, 'max_duration' => 10, 'buffer' => false] // the request should finish after 5s
+                'http://localhost:8000/sleep.php', // sleep for 5s, then give a response
+                ['timeout' => 3, 'max_duration' => 10] // the request should finish after 5s
             );
 
             echo $response->getContent(false);
@@ -86,7 +86,7 @@ class TestController extends AbstractController
         try {
             $response = $client->request(
                 'GET',
-                'http://localhost:8000/sleep.php', // sleep for 5s
+                'http://localhost:8000/sleep.php', // sleep for 5s, then give a response
                 ['timeout' => 3, 'max_duration' => 10] // the request should finish after 5s
             );
 
