@@ -80,6 +80,9 @@ class TestController extends AbstractController
     #[Route(path: '/test/workaround', name: 'test_workaround', methods: ['GET'])]
     public function testWorkaround(HttpClientInterface $client): Response
     {
+        $timeout = 3;
+        $maxDuration = 10;
+
         $clientClass = get_class($client);
         $ts = hrtime(true);
 
@@ -87,11 +90,11 @@ class TestController extends AbstractController
             $response = $client->request(
                 'GET',
                 'http://localhost:8000/sleep.php', // sleep for 5s, then give a response
-                ['timeout' => 3, 'max_duration' => 10] // the request should finish after 5s
+                ['timeout' => $timeout, 'max_duration' => $maxDuration] // the request should finish after 5s
             );
 
             // this is just another way to fix it (don't do anything with $response until this is done):
-            $responseStream = $client->stream($response, 3);
+            $responseStream = $client->stream($response, $timeout);
             if ($responseStream->valid()) {
                 $chunk = $responseStream->current();
                 try {
@@ -109,6 +112,10 @@ class TestController extends AbstractController
             // operations with response are "safe" here
             echo $response->getContent(false);
         } catch (TimeoutException $e) {
+            // failed to connect within "timeout" seconds
+            return self::getResponse(Response::HTTP_REQUEST_TIMEOUT, $clientClass, $ts, $e);
+        } catch (TransportException $e) {
+            // failed finish geting the response within "max_duration" seconds, which can be greater than "timeout" seconds
             return self::getResponse(Response::HTTP_REQUEST_TIMEOUT, $clientClass, $ts, $e);
         }
 
