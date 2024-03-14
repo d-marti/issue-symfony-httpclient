@@ -101,7 +101,7 @@ class TestController extends AbstractController
                     //  Greater than 0.0 it means that a connection was established
                     if ($response->getInfo('connect_time') === 0.0) {
                         $response->cancel();
-                        throw new TimeoutException('Connection timeout');
+                        throw $e;
                     }
                 }
             }
