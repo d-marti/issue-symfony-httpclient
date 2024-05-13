@@ -1,6 +1,7 @@
 framework:
     http_client:
         default_options:
+            http_version: '%env(string:HTTP_VERSION)%'
             verify_host: false
             verify_peer: false
             retry_failed:
