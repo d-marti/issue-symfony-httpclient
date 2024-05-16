@@ -55,3 +55,5 @@ method like so:
         $response->initializer = null;
     }
 ```
+
+I also created a decorator to do the same thing, which you can see on the "solution-decorator" branch of this project.
